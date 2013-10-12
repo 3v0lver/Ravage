@@ -1,0 +1,4 @@
+Changelog:
+version 0.1
+Basic functionality exists for deployment and extraction against a default installation of the application, however further work needs to be done to dynamically discover the installation directory to ensure the tool can find the database credentials, driver and such.
+

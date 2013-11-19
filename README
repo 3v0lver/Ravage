@@ -72,7 +72,8 @@ The current PoC assumes installation defaults, as a result the tool will not be 
 
 TODO:
 -----------------
-[-]Automatic detection of DCNM installation directory
+[-] Improvements?
+[x] Automatic detection of DCNM installation directory
 ...
 
 

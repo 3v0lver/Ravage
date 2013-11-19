@@ -32,14 +32,18 @@ class DriverShim implements Driver {
         }
 }
 
-	
 public ArrayList<ArrayList> matrix = new ArrayList<ArrayList>();
 
 public dbquery(String dbpath, String pgLogin, String pgPassword, String query){ 
 URL[] u = new URL[0];
+String[] TempDIR;
+String str = System.getProperty("user.dir");
+String regex = "\\\\";
+TempDIR = str.split(regex);
 
 try {
-	u[0] = new URL("jar:file:c:/jboss-4.2.2.GA/server/dcnm/lib/postgresql-8.1-404.jdbc3.jar!/");
+	u[0] = new URL("jar:file:" + TempDIR[0]+"/"+TempDIR[1]+"/"+TempDIR[2] + "/jboss-4.2.2.GA/server/dcnm/lib/postgresql-8.1-404.jdbc3.jar!/");
+
 	}	catch (Exception e) {
                         e.printStackTrace();
                 }
@@ -54,6 +58,7 @@ try {
                 try {
                         Driver d = (Driver)Class.forName(classname, true, ucl).newInstance();
                         DriverManager.registerDriver(new DriverShim(d));
+                //this may not be true, but its probably a safe assumption
 
                 Conn = DriverManager.getConnection(dbpath,pgLogin, pgPassword);
                 st = Conn.createStatement();
@@ -101,7 +106,6 @@ try {
 				}
 
 }
-
 
 }
 

@@ -51,22 +51,24 @@ FormSubmit = "";
 
 }
 
-
 String pgLogin = (String) session.getAttribute("pgLogin");
 String pgPassword = (String) session.getAttribute("pgPassword");
         if (pgLogin == null) {
             
             
-BufferedReader input = new BufferedReader(new FileReader("C:\\Program Files\\Cisco Systems\\dcm\\dcnm\\bin\\clean-pgsql-dcnm-db.bat"));
+BufferedReader input = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\backup-pgsql-dcnm-db.bat"));
+
 while ((line = input.readLine()) != null) {
 	try{
-	   if (line.matches("(?i)set PGLOGINUSER=.*")){
-		pgLogin = new String(line.replaceAll("set PGLOGINUSER=|\"",""));
+	   if (line.matches("(?i)set PGUSER1=.*")){
+		pgLogin = new String(line.replaceAll("set PGUSER1=|\"",""));
+		out.println(pgLogin);
             	session.setAttribute("pgLogin", pgLogin);
 		
-		}else if (line.matches("(?i)set PGLOGINPASSWORD=.*")){
-		pgPassword = new String(line.replaceAll("set PGLOGINPASSWORD=|\"",""));
-		out.println("");
+		}else if (line.matches("(?i)set PGPASSWORD1=.*")){
+		pgPassword = new String(line.replaceAll("set PGPASSWORD1=|\"",""));
+		out.println(pgPassword);
+		//out.println("");
             	session.setAttribute("pgPassword", pgPassword);
 		}
 	}catch (java.io.FileNotFoundException e){
@@ -74,6 +76,7 @@ while ((line = input.readLine()) != null) {
 }
 }
         } else {
+        //out.println("already set the session variables");    
             
         }
 
@@ -87,6 +90,13 @@ if (request.getParameter("DBcmd") != null) {
 		ArrayList<ArrayList> matrix = new ArrayList<ArrayList>();
 		matrix = genericQuery.matrix;
 	
+//        	for(x = 0; x < matrix.size();x++){
+//               		for(y = 0; y < matrix.get(x).size(); y++){
+//                        	matrixout = matrixout + (String)((ArrayList)matrix.get(x)).get(y) + " ";
+//
+//        		}
+//        		matrixout = matrixout + "\r\n";
+//		}		
 		HTMLformatter FormatGenQuery = new HTMLformatter(genericQuery.matrix);
 		out.println(FormatGenQuery.Result);
         	
@@ -119,9 +129,19 @@ dbquery dumpPWDQuery = new dbquery("jdbc:postgresql://127.0.0.1:5432/dcmdb",pgLo
                 String matrixout = "";
                 ArrayList<ArrayList> matrix = new ArrayList<ArrayList>();
                 matrix = dumpPWDQuery.matrix;
+		//out.println(matrix.size());
+
+//                for(x = 0; x < matrix.size();x++){
+//                        for(y = 0; y < matrix.get(x).size(); y++){
+//                                matrixout = matrixout + (String)((ArrayList)matrix.get(x)).get(y) + " ";
+//
+//                        }
+//                        matrixout = matrixout + "\r\n";
+//                }
 		HTMLformatterPwords pwordQuery = new HTMLformatterPwords(dumpPWDQuery.matrix);
 		out.println(pwordQuery.Result);
 
+                //out.println(matrixout);
 
 
 }
